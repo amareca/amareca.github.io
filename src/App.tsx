@@ -150,7 +150,11 @@ function App() {
         if (!response.ok) throw new Error(`GitHub API: ${response.status}`)
 
         const data: GitHubRepository[] = await response.json()
-        const ownRepositories = data.filter((repository) => !repository.fork)
+        const ownRepositories = data.filter(
+          (repository) =>
+            !repository.fork &&
+            repository.name.toLowerCase() !== `${profile.username}.github.io`.toLowerCase(),
+        )
         const repositoriesWithImages = await Promise.all(
           ownRepositories.map(async (repository) => ({
             ...repository,
